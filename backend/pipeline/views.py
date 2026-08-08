@@ -123,7 +123,10 @@ def recent_deals(request):
         status_labels = dict(Deal.STATUS_CHOICES)
         data = [
             {
-                "customer": deal.customer.name if deal.customer else "Unknown",
+                "customer": (
+                    f"{deal.customer.first_name} {deal.customer.last_name}".strip()
+                    if deal.customer else "Unknown"
+                ),
                 "company": deal.customer.company if deal.customer and deal.customer.company else "N/A",
                 "deal_value": deal.value,
                 "stage": status_labels.get(deal.status, deal.status),
@@ -180,5 +183,3 @@ def pipeline_performance(request):
 
     serializer = PipelinePerformanceSerializer(data)
     return Response(serializer.data, status=status.HTTP_200_OK)
-
-# Create your views here.
